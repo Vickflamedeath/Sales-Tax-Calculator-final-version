@@ -1,0 +1,74 @@
+# Program to calculate the total price of items in a shopping cart including sales tax
+
+# Function to get a list of item prices from the user
+def get_item_prices():
+    item_prices = []
+    
+    # Loop to continuously prompt the user to enter item prices until they type 'done'
+    while True:
+        price = input("Enter the item price (or type 'done' to finish): ")
+        
+        # Check if the user wants to stop entering prices
+        if price.lower() == 'done':
+            break
+        
+        # Try to convert the entered price to a float and add it to the list
+        try:
+            item_prices.append(float(price))
+        except ValueError:
+            # If conversion fails, prompt the user to enter a valid number
+            print("Please enter a valid number.")
+    
+    # Loop to allow the user to review and remove items from the list if necessary
+    while True:
+        print("\nCurrent items:")
+        for i, price in enumerate(item_prices, start=1):
+            print(f"{i}. ${price:.2f}")
+        
+        action = input("Do you want to remove any item? Enter the item number to remove or 'no' to proceed: ")
+        
+        # Check if the user wants to proceed without removing items
+        if action.lower() == 'no':
+            break
+        
+        # Try to convert the entered action to an integer and remove the corresponding item
+        try:
+            item_to_remove = int(action)
+            if 1 <= item_to_remove <= len(item_prices):
+                item_prices.pop(item_to_remove - 1)
+                print("Item removed.")
+            else:
+                print("Invalid item number.")
+        except ValueError:
+            print("Please enter a valid number.")
+    
+    return item_prices
+
+# Function to get the sales tax rate from the user
+def get_sales_tax_rate():
+    while True:
+        try:
+            # Prompt the user to enter the sales tax rate as a percentage
+            tax_rate = float(input("Enter the sales tax rate (as a percentage): "))
+            if 0 <= tax_rate <= 100:
+                return tax_rate / 100
+            else:
+                print("Please enter a valid tax rate between 0 and 100.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+# Main function to calculate and display the total price
+def main():
+    item_prices = get_item_prices()  # Get the list of item prices from the user
+    sales_tax_rate = get_sales_tax_rate()  # Get the sales tax rate from the user
+    subtotal = sum(item_prices)  # Calculate the subtotal by summing the item prices
+    total_price = subtotal + (subtotal * sales_tax_rate)  # Calculate the total price including sales tax
+    
+    # Display the subtotal and the total price including sales tax
+    print(f"\nThe subtotal of items: ${subtotal:.2f}")
+    print(f"The total price including sales tax is: ${total_price:.2f}")
+
+# Execute the main function if the script is run directly
+if __name__ == "__main__":
+    main()
+
